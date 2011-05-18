@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * 
+ * Enter description here ...
+ * @author Jonathan Jefferies
+ *
+ */
 abstract class InteractiveCLI {
 	protected $goodbye = "bye\n";
 
