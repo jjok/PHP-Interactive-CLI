@@ -9,6 +9,6 @@
 final class Test extends InteractiveCLI {
 
 	protected function readLine($command) {
-		echo "You just typed: $command\n";
+		echo "You just typed: $command";
 	}
 }
