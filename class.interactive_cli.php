@@ -16,12 +16,14 @@ abstract class InteractiveCLI {
 
 	public function __construct() {
 		if(defined('STDIN')) {
+			#Print welcome message
 			echo $this->welcome;
 	
 			while(true) {
 				if($this->prompt != '') {
 					echo "\n$this->prompt";
 				}
+				#Wait for input
 				$line = trim(fgets(STDIN));
 	
 				switch($line) {
@@ -39,6 +41,7 @@ abstract class InteractiveCLI {
 						}
 				}
 			}
+			#Print goodby message
 			echo $this->goodbye;
 		}
 		else throw new Exception('This program runs for the command line.');
@@ -55,6 +58,11 @@ abstract class InteractiveCLI {
 		$this->history[] = $command;
 	}
 
+	/**
+	 * 
+	 * Get the currently stored history
+	 * @return array
+	 */
 	protected function getHistory() {
 		return $this->history;
 	}
@@ -68,6 +76,11 @@ abstract class InteractiveCLI {
 		$this->history = array();
 	}
 
+	/**
+	 * 
+	 * Enter description here ...
+	 * @param unknown_type $e
+	 */
 	protected function handleError(Exception $e) {
 		echo $e->getMessage();
 	}
