@@ -2,57 +2,74 @@
 /**
  * 
  * Enter description here ...
- * @author Jonathan Jefferies
+ * @author Jonathan Jefferies (jjok)
  *
  */
 abstract class InteractiveCLI {
+	private $length = 1024;
 	private $history = array();
 
 	protected $welcome = '';
 	protected $prompt = '';
 	protected $goodbye = '';
-	protected $exit = '';
+	#protected $exit = '';
 	#protected $help = 'Type "exit" to exit.';
+
+	protected $commands = array(
+		'exit' => '',
+		'help' => 'help'
+	);
 
 	public function __construct() {
 		if(defined('STDIN')) {
 			#Print welcome message
-			echo $this->welcome;
+			$this->output($this->welcome);
 	
-			while(true) {
-				if($this->prompt != '') {
-					echo "\n$this->prompt";
-				}
-				#Wait for input
-				$line = trim(fgets(STDIN));
-	
-				switch($line) {
-					case $this->exit:
-						break 2;
-					case '':
-						#echo $this->help;
-						continue 2;
-					default:
-						try {
-							$this->readLine($line);
-						}
-						catch(Exception $e) {
-							$this->handleError($e);
-						}
-				}
-			}
-			#Print goodby message
-			echo $this->goodbye;
+			#Run program loop
+			$this->loop();
+
+			#Print goodbye message
+			$this->output($this->goodbye);
 		}
-		else throw new Exception('This program runs for the command line.');
+		else throw new Exception('This program runs from the command line.');
+	}
+
+	private function loop() {
+		while(true) {
+			if($this->prompt != '') {
+				$this->output("\n$this->prompt");
+			}
+			#Wait for input
+			$line = trim(fgets(STDIN, $this->length));
+
+			switch($line) {
+				case $this->commands['exit']:
+					break 2;
+				case $this->commands['help']:
+					#echo $this->help;
+					echo 'this is the help';
+					break;
+					#continue 2;
+				case '':
+					break;
+				default:
+					try {
+						$this->readLine($line);
+					}
+					catch(Exception $e) {
+						$this->handleError($e);
+					}
+			}
+		}
 	}
 
 	abstract protected function readLine($command);
 
 	/**
 	 * 
-	 * Enter description here ...
+	 * Store the command for future use
 	 * @param string $command
+	 * @return void
 	 */
 	protected function addToHistory($command) {
 		$this->history[] = $command;
@@ -78,10 +95,14 @@ abstract class InteractiveCLI {
 
 	/**
 	 * 
-	 * Enter description here ...
-	 * @param unknown_type $e
+	 * Output any error message
+	 * @param Exception $e
 	 */
 	protected function handleError(Exception $e) {
 		echo $e->getMessage();
+	}
+
+	protected function output($output) {
+		echo $output;
 	}
 }
