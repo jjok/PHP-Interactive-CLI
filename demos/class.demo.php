@@ -3,20 +3,20 @@
  * 
  * Demo implementation of PHP Interactive CLI
  * Echos back anything you type in.
- * @author Jonathan Jefferies
+ * @author Jonathan Jefferies (jjok)
  *
  */
-final class Test extends InteractiveCLI {
+final class Demo extends InteractiveCLI {
 
 	public function __construct() {
 		$this->welcome = 'Welcome!';
 		$this->prompt = '>> ';
 		$this->goodbye = 'Bye!';
-		$this->exit = 'exit';
+		$this->commands['exit'] = 'exit';
 		parent::__construct();
 	}
 
 	protected function readLine($command) {
-		echo "You just typed: $command";
+		$this->output("You just typed: $command");
 	}
 }
