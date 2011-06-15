@@ -71,7 +71,7 @@ abstract class InteractiveCLI {
 	 * @param string $command
 	 * @return void
 	 */
-	protected function addToHistory($command) {
+	final protected function addToHistory($command) {
 		$this->history[] = $command;
 	}
 
@@ -80,7 +80,7 @@ abstract class InteractiveCLI {
 	 * Get the currently stored history
 	 * @return array
 	 */
-	protected function getHistory() {
+	final protected function getHistory() {
 		return $this->history;
 	}
 
@@ -89,7 +89,7 @@ abstract class InteractiveCLI {
 	 * Clear the command history
 	 * @return void
 	 */
-	protected function clearHistory() {
+	final protected function clearHistory() {
 		$this->history = array();
 	}
 
@@ -99,7 +99,7 @@ abstract class InteractiveCLI {
 	 * @param Exception $e
 	 */
 	protected function handleError(Exception $e) {
-		echo $e->getMessage();
+		$this->output($e->getMessage());
 	}
 
 	protected function output($output) {
