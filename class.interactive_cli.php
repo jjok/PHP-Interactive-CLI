@@ -1,23 +1,21 @@
 <?php
 /**
  * 
- * Enter description here ...
+ * Abstract class 
  * @author Jonathan Jefferies (jjok)
  *
  */
 abstract class InteractiveCLI {
-	private $length = 1024;
-	private $history = array();
+	private $line_length = 1024;
 
 	protected $welcome = '';
 	protected $prompt = '';
 	protected $goodbye = '';
-	#protected $exit = '';
-	#protected $help = 'Type "exit" to exit.';
+	//protected $help = '';
 
 	protected $commands = array(
-		'exit' => '',
-		'help' => 'help'
+		'exit' => ''/*,
+		'help' => ''*/
 	);
 
 	public function __construct() {
@@ -37,21 +35,22 @@ abstract class InteractiveCLI {
 	private function loop() {
 		while(true) {
 			if($this->prompt != '') {
-				$this->output("\n$this->prompt");
+				$prompt = (!isset($line) || ($line != '')/* || in_array('', $this->commands)*/)? "\n$this->prompt": $this->prompt;
+				$this->output($prompt);
 			}
 			#Wait for input
-			$line = trim(fgets(STDIN, $this->length));
+			$line = trim(fgets(STDIN, $this->line_length));
 
 			switch($line) {
 				case $this->commands['exit']:
 					break 2;
-				case $this->commands['help']:
-					#echo $this->help;
-					echo 'this is the help';
-					break;
-					#continue 2;
+				/*case $this->commands['help']:
+					if($this->help != '') {
+						$this->output($this->help);
+						break;
+					}
 				case '':
-					break;
+					break;*/
 				default:
 					try {
 						$this->readLine($line);
@@ -63,35 +62,13 @@ abstract class InteractiveCLI {
 		}
 	}
 
-	abstract protected function readLine($command);
-
 	/**
 	 * 
-	 * Store the command for future use
+	 * Process a line of input
 	 * @param string $command
 	 * @return void
 	 */
-	final protected function addToHistory($command) {
-		$this->history[] = $command;
-	}
-
-	/**
-	 * 
-	 * Get the currently stored history
-	 * @return array
-	 */
-	final protected function getHistory() {
-		return $this->history;
-	}
-
-	/**
-	 * 
-	 * Clear the command history
-	 * @return void
-	 */
-	final protected function clearHistory() {
-		$this->history = array();
-	}
+	abstract protected function readLine($command);
 
 	/**
 	 * 
@@ -102,6 +79,11 @@ abstract class InteractiveCLI {
 		$this->output($e->getMessage());
 	}
 
+	/**
+	 * 
+	 * Print output
+	 * @param string $output
+	 */
 	protected function output($output) {
 		echo $output;
 	}

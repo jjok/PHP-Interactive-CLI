@@ -13,10 +13,18 @@ final class Demo extends InteractiveCLI {
 		$this->prompt = '>> ';
 		$this->goodbye = 'Bye!';
 		$this->commands['exit'] = 'exit';
+		#$this->commands['help'] = 'help';
+		#$this->help = 'Type "exit" to exit.';
 		parent::__construct();
 	}
 
 	protected function readLine($command) {
-		$this->output("You just typed: $command");
+		switch($command) {
+			case '':
+				#$this->output('Type "exit" to exit.');
+				break;
+			default:
+				$this->output("You just typed: $command");
+		}
 	}
 }
