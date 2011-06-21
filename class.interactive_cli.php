@@ -3,20 +3,17 @@
  * 
  * Abstract class 
  * @author Jonathan Jefferies (jjok)
+ * https://github.com/jjok/PHP-Interactive-CLI
  *
  */
 abstract class InteractiveCLI {
+
 	private $line_length = 1024;
-
-	protected $welcome = '';
-	protected $prompt = '';
-	protected $goodbye = '';
-	//protected $help = '';
-
-	protected $commands = array(
-		'exit' => ''/*,
-		'help' => ''*/
-	);
+	private $prompt = '';
+	private $welcome = '';
+	private $goodbye = '';
+	private $exit = '';
+	private $debug = false;
 
 	public function __construct() {
 		if(defined('STDIN')) {
@@ -35,22 +32,15 @@ abstract class InteractiveCLI {
 	private function loop() {
 		while(true) {
 			if($this->prompt != '') {
-				$prompt = (!isset($line) || ($line != '')/* || in_array('', $this->commands)*/)? "\n$this->prompt": $this->prompt;
+				$prompt = (!isset($line) || $line != '')? "\n$this->prompt": $this->prompt;
 				$this->output($prompt);
 			}
 			#Wait for input
 			$line = trim(fgets(STDIN, $this->line_length));
 
 			switch($line) {
-				case $this->commands['exit']:
+				case $this->exit:
 					break 2;
-				/*case $this->commands['help']:
-					if($this->help != '') {
-						$this->output($this->help);
-						break;
-					}
-				case '':
-					break;*/
 				default:
 					try {
 						$this->readLine($line);
@@ -72,10 +62,25 @@ abstract class InteractiveCLI {
 
 	/**
 	 * 
+	 * Enter description here ...
+	 * @param string $param
+	 * @param mixed $value
+	 * @throws Exception
+	 */
+	protected function setParam($param, $value) {
+		if(property_exists('InteractiveCLI', $param)) {
+		#if(isset($this->$param)) {
+			$this->$param = $value;
+		}
+		else throw new Exception("Parameter '$param' does not exist.");
+	}
+
+	/**
+	 * 
 	 * Output any error message
 	 * @param Exception $e
 	 */
-	protected function handleError(Exception $e) {
+	private function handleError(Exception $e) {
 		$this->output($e->getMessage());
 	}
 
@@ -86,5 +91,11 @@ abstract class InteractiveCLI {
 	 */
 	protected function output($output) {
 		echo $output;
+	}
+
+	public function __destruct() {
+		if($this->debug) {
+			$this->output("\nMemory usage: ".memory_get_usage().' bytes');
+		}
 	}
 }
