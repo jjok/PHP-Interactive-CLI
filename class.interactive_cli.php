@@ -95,7 +95,8 @@ abstract class InteractiveCLI {
 
 	public function __destruct() {
 		if($this->debug) {
-			$this->output("\nMemory usage: ".memory_get_usage().' bytes');
+			$this->output("\n\nMemory usage: ".memory_get_usage().' bytes');
+			$this->output("\nMemory peak usage: ".memory_get_peak_usage().' bytes');
 		}
 	}
 }
