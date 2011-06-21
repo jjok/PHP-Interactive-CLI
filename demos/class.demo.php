@@ -26,6 +26,10 @@ final class Demo extends InteractiveCLI {
 		switch($command) {
 			case '':
 				break;
+			case 'h':
+			case 'help':
+				$this->output('Type "exit" to exit.');
+				break;
 			default:
 				$this->output("You just typed: $command");
 		}
