@@ -38,16 +38,14 @@ abstract class InteractiveCLI {
 			#Wait for input
 			$line = trim(fgets(STDIN, $this->line_length));
 
-			switch($line) {
-				case $this->exit:
-					break 2;
-				default:
-					try {
-						$this->readLine($line);
-					}
-					catch(Exception $e) {
-						$this->handleError($e);
-					}
+			if($line === $this->exit) {
+				break;
+			}
+			try {
+				$this->readLine($line);
+			}
+			catch(Exception $e) {
+				$this->handleError($e);
 			}
 		}
 	}
@@ -62,7 +60,7 @@ abstract class InteractiveCLI {
 
 	/**
 	 * 
-	 * Enter description here ...
+	 * Set any of the parameter properties
 	 * @param string $param
 	 * @param mixed $value
 	 * @throws Exception
