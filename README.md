@@ -7,5 +7,5 @@ See demo.
 
 To run demo:
 
->> cd demos
->> php demo.php
+	>> cd demos
+	>> php demo.php
