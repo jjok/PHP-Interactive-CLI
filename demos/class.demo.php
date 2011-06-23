@@ -9,11 +9,11 @@
 final class Demo extends InteractiveCLI {
 
 	public function __construct() {
-		$this->setParam('welcome', 'Welcome!');
-		$this->setParam('goodbye', 'Bye!');
+		$this->setParam('welcome', "\nWelcome! This demo will echo back anything you type.\n\nType \"h\" or \"help\" for help.\n");
+		$this->setParam('goodbye', "\nBye!\n");
 		$this->setParam('prompt', '>> ');
 		$this->setParam('exit', 'exit');
-		$this->setParam('debug', true);
+		$this->setParam('debug', false);
 		parent::__construct();
 	}
 
@@ -24,12 +24,15 @@ final class Demo extends InteractiveCLI {
 	 */
 	protected function readLine($command) {
 		switch($command) {
+			#Don't do anything, if nothing was typed
 			case '':
 				break;
+			#Help
 			case 'h':
 			case 'help':
 				$this->output('Type "exit" to exit.');
 				break;
+			#Any other text input
 			default:
 				$this->output("You just typed: $command");
 		}
