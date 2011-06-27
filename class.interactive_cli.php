@@ -38,11 +38,11 @@ abstract class InteractiveCLI {
 			#Wait for input
 			$line = trim(fgets(STDIN, $this->line_length));
 
-			if($line === $this->exit) {
-				break;
-			}
 			try {
-				$this->readLine($line);
+				#If the exit command was entered, or readLine returns falase, exit the program
+				if($line === $this->exit || $this->readLine($line) === false) {
+					break;
+				}
 			}
 			catch(Exception $e) {
 				$this->handleError($e);

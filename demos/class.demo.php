@@ -30,8 +30,10 @@ final class Demo extends InteractiveCLI {
 			#Help
 			case 'h':
 			case 'help':
-				$this->output('Type "exit" to exit.');
+				$this->output('Type "e" or exit" to exit.');
 				break;
+			case 'e':
+				return false;
 			#Any other text input
 			default:
 				$this->output("You just typed: $command");
