@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * Abstract class 
+ * Abstract class which can be extended to create a program that accepts multiple lines of input and return output.
  * @author Jonathan Jefferies (jjok)
  * https://github.com/jjok/PHP-Interactive-CLI
  *
@@ -29,6 +29,11 @@ abstract class InteractiveCLI {
 		else throw new Exception('This program runs from the command line.');
 	}
 
+	/**
+	 * 
+	 * Enter description here ...
+	 * @return void
+	 */
 	private function loop() {
 		while(true) {
 			if($this->prompt != '') {
@@ -39,7 +44,7 @@ abstract class InteractiveCLI {
 			$line = trim(fgets(STDIN, $this->line_length));
 
 			try {
-				#If the exit command was entered, or readLine returns falase, exit the program
+				#If the exit command was entered, or readLine returns false, exit the program
 				if($line === $this->exit || $this->readLine($line) === false) {
 					break;
 				}
@@ -52,9 +57,9 @@ abstract class InteractiveCLI {
 
 	/**
 	 * 
-	 * Process a line of input
+	 * Process a line of input.
 	 * @param string $command
-	 * @return void
+	 * @return mixed (void or false)
 	 */
 	abstract protected function readLine($command);
 
