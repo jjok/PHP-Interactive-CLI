@@ -15,11 +15,16 @@ abstract class InteractiveCLI {
 	private $exit = '';
 	private $debug = false;
 
-	public function __construct() {
+	/**
+	 * 
+	 * Enter description here ...
+	 * @throws Exception
+	 */
+	public function run() {
 		if(defined('STDIN')) {
 			#Print welcome message
 			$this->output($this->welcome);
-	
+
 			#Run program loop
 			$this->loop();
 
@@ -37,15 +42,15 @@ abstract class InteractiveCLI {
 	private function loop() {
 		while(true) {
 			if($this->prompt != '') {
-				$prompt = (!isset($line) || $line != '')? "\n$this->prompt": $this->prompt;
+				$prompt = (!isset($input) || $input != '')? "\n$this->prompt": $this->prompt;
 				$this->output($prompt);
 			}
 			#Wait for input
-			$line = trim(fgets(STDIN, $this->line_length));
+			$input = trim(fgets(STDIN, $this->line_length));
 
 			try {
 				#If the exit command was entered, or readLine returns false, exit the program
-				if($line === $this->exit || $this->readLine($line) === false) {
+				if($input === $this->exit || $this->readLine($input) === false) {
 					break;
 				}
 			}
@@ -59,7 +64,7 @@ abstract class InteractiveCLI {
 	 * 
 	 * Process a line of input.
 	 * @param string $command
-	 * @return mixed (void or false)
+	 * @return boolean
 	 */
 	abstract protected function readLine($command);
 
@@ -96,10 +101,10 @@ abstract class InteractiveCLI {
 		echo $output;
 	}
 
-	public function __destruct() {
+	/*public function __destruct() {
 		if($this->debug) {
 			$this->output("\n\nMemory usage: ".memory_get_usage().' bytes');
 			$this->output("\nMemory peak usage: ".memory_get_peak_usage().' bytes');
 		}
-	}
+	}*/
 }
