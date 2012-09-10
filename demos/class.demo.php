@@ -6,19 +6,17 @@
  * @author Jonathan Jefferies (jjok)
  *
  */
-final class Demo extends InteractiveCLI {
+class Demo extends InteractiveCLI {
 
 	public function __construct() {
 		$this->setParam('welcome', "\nWelcome! This demo will echo back anything you type.\n\nType \"h\" or \"help\" for help.\n");
 		$this->setParam('goodbye', "\nBye!\n");
 		$this->setParam('prompt', '>> ');
 		$this->setParam('exit', 'exit');
-		#$this->setParam('debug', false);
 	}
 
 	/**
-	 * 
-	 * Print out any input
+	 * Process each line of input.
 	 * @param string $command
 	 * @return boolean
 	 */
