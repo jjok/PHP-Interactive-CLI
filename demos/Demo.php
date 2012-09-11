@@ -6,19 +6,19 @@
  * @author Jonathan Jefferies (jjok)
  *
  */
-class Demo extends InteractiveCLI {
+class Demo extends \jjok\InteractiveCLI {
 
-	public function __construct() {
-		$this->setParam('welcome', "\nWelcome! This demo will echo back anything you type.\n\nType \"h\" or \"help\" for help.\n");
-		$this->setParam('goodbye', "\nBye!\n");
-		$this->setParam('prompt', '>> ');
-		$this->setParam('exit', 'exit');
-	}
+// 	public function __construct() {
+// 		$this->setParam('welcome', "\nWelcome! This demo will echo back anything you type.\n\nType \"h\" or \"help\" for help.\n");
+// 		$this->setParam('goodbye', "\nBye!\n");
+// 		$this->setParam('prompt', '>> ');
+// 		#$this->setParam('exit', 'exit');
+// 	}
 
 	/**
 	 * Process each line of input.
 	 * @param string $command
-	 * @return boolean
+	 * @return boolean The program should exit.
 	 */
 	protected function readLine($input) {
 		switch($input) {
@@ -32,11 +32,12 @@ class Demo extends InteractiveCLI {
 				break;
 			#Exit
 			case 'e':
-				return false;
+			case 'exit':
+				return true;
 			#Any other text input
 			default:
 				$this->output("You just typed: $input");
 		}
-		return true;
+		return false;
 	}
 }

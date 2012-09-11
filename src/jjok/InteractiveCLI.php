@@ -1,9 +1,9 @@
 <?php
 
-namespace JJOK;
+namespace jjok;
 
 /**
- * Abstract class which can be extended to create a program that accepts multiple lines of input and return output.
+ * Abstract class which can be extended to create a program that accepts multiple lines of input and prints output.
  * @author Jonathan Jefferies (jjok)
  * https://github.com/jjok/PHP-Interactive-CLI
  */
@@ -16,60 +16,57 @@ abstract class InteractiveCLI {
 	private $line_length = 1024;
 
 	/**
-	 * 
+	 * The prompt.
 	 * @var string
 	 */
 	private $prompt = '';
 
 	/**
-	 * 
+	 * The welcome message.
 	 * @var string
 	 */
 	private $welcome = '';
 
 	/**
-	 * 
+	 * The exit message.
 	 * @var string
 	 */
 	private $goodbye = '';
 
-	/**
-	 * 
-	 * @var string
-	 */
-	private $exit = '';
+// 	/**
+// 	 * The command to exit the program.
+// 	 * @var string
+// 	 */
+// 	private $exit = '';
 
 	/**
 	 * Run the program.
+	 * @param resource $input
 	 * @throws Exception
 	 */
 	public function run($input) {
-		//if(defined('STDIN')) {
+
 		#Print welcome message
 		$this->output($this->welcome);
 
 		#Run program loop
-		#$this->loop(STDIN);
 		$this->loop($input);
 
 		#Print goodbye message
 		$this->output($this->goodbye);
-		//}
-		//else throw new Exception('This program runs from the command line.');
 	}
 
 	/**
 	 * Process each line of input.
 	 * @param resource $input
-	 * @return void
 	 */
 	private function loop($input) {
 		
 		try {
 			while(true) {
+				
 				#Print a prompt, if required.
 				if($this->prompt != '') {
-					#$prompt = (!isset($line) || $line != '')? "\n$this->prompt": $this->prompt;
 					if (!isset($line) || $line != '') {
 						$this->output("\n");
 					}
@@ -78,43 +75,40 @@ abstract class InteractiveCLI {
 				
 				#Wait for input
 				$line = trim(fgets($input, $this->line_length));
-
-				#If the exit command was entered, or readLine returns false, exit the program
-				if($line === $this->exit || $this->readLine($line) === false) {
+				
+				#If readLine returns true, exit the program
+				if($this->readLine($line)) {
 					break;
 				}
 			}
 		}
-		catch(Exception $e) {
-			$this->handleError($e);
+		catch(\Exception $e) {
+			$this->output($e->getMessage());
 		}
 	}
 
-	/**
-	 *
-	 * Output any error message
-	 * @param Exception $e
-	 */
-	private function handleError(Exception $e) {
-		$this->output($e->getMessage());
-	}
+// 	/**
+// 	 * Handle any error message
+// 	 * @param \Exception $e
+// 	 */
+// 	private function handleError(\Exception $e) {
+// 		$this->output($e->getMessage());
+// 	}
 
 	/**
 	 * Set any of the parameter properties
 	 * @param string $param
 	 * @param mixed $value
-	 * @throws Exception
+	 * @throws \Exception
 	 */
-	protected function setParam($param, $value) {
-		if(property_exists('InteractiveCLI', $param)) {
-		#if(isset($this->$param)) {
+	public function setParam($param, $value) {
+		if(property_exists('\jjok\InteractiveCLI', $param)) {
 			$this->$param = $value;
 		}
-		else throw new Exception("Parameter '$param' does not exist.");
+		else throw new \Exception("Parameter '$param' does not exist.");
 	}
 
 	/**
-	 * 
 	 * Print output
 	 * @param string $output
 	 */
@@ -123,9 +117,9 @@ abstract class InteractiveCLI {
 	}
 
 	/**
-	 * Process a line of input.
+	 * Process each line of input.
 	 * @param string $command
-	 * @return boolean
+	 * @return boolean The program should exit.
 	 */
 	abstract protected function readLine($command);
 }
