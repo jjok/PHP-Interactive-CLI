@@ -12,3 +12,9 @@ Demo
 To run demo:
 
 	php demos/run_demo.php
+
+
+TODO
+----
+
+- Better unit tests.

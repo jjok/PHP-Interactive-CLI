@@ -33,11 +33,18 @@ abstract class InteractiveCLI {
 	 */
 	private $goodbye = '';
 
-// 	/**
-// 	 * The command to exit the program.
-// 	 * @var string
-// 	 */
-// 	private $exit = '';
+	/**
+	 * Set any of the parameter properties
+	 * @param string $param
+	 * @param mixed $value
+	 * @throws \Exception
+	 */
+	public function setParam($param, $value) {
+		if(property_exists('\jjok\InteractiveCLI', $param)) {
+			$this->$param = $value;
+		}
+		else throw new \Exception("Parameter '$param' does not exist.");
+	}
 
 	/**
 	 * Run the program.
@@ -96,20 +103,7 @@ abstract class InteractiveCLI {
 // 	}
 
 	/**
-	 * Set any of the parameter properties
-	 * @param string $param
-	 * @param mixed $value
-	 * @throws \Exception
-	 */
-	public function setParam($param, $value) {
-		if(property_exists('\jjok\InteractiveCLI', $param)) {
-			$this->$param = $value;
-		}
-		else throw new \Exception("Parameter '$param' does not exist.");
-	}
-
-	/**
-	 * Print output
+	 * Print output.
 	 * @param string $output
 	 */
 	protected function output($output) {
