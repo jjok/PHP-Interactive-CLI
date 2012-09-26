@@ -1,8 +1,8 @@
 <?php
 
-require_once 'src/jjok/InteractiveCLI.php';
+require_once 'src/jjok/InteractiveCLI/InteractiveCLI.php';
 
-class TestCli extends \jjok\InteractiveCLI {
+class TestCli extends \jjok\InteractiveCLI\InteractiveCLI {
 	
 	public function readLine($input) {
 		
@@ -10,23 +10,33 @@ class TestCli extends \jjok\InteractiveCLI {
 			throw new \Exception('This is an error.');
 		}
 		elseif($input == 'continue') {
-			return false;
+			return true;
+		}
+		elseif($input == 'echo') {
+			echo 'echo';
+			return true;
 		}
 		echo $input;
-		return true;
+
+		return false;
 	}
 }
 
 class InteractiveCLITest extends PHPUnit_Framework_TestCase {
-
 	
 	public function testNoInput() {
 		$cli = new TestCli();
 
 		$cli->run($this->stringToResource(''));
 		$this->expectOutputString('');
+		
+		$cli->run($this->stringToResource("\n\n\n"));
+		$this->expectOutputString('');
 	}
-	
+
+	/**
+	 * Test 
+	 */
 	public function testPrintInput() {
 		$cli = new TestCli();
 
@@ -34,6 +44,9 @@ class InteractiveCLITest extends PHPUnit_Framework_TestCase {
 		$this->expectOutputString('hi');
 	}
 
+	/**
+	 * 
+	 */
 	public function testMultiLineInput() {
 		$cli = new TestCli();
 	
@@ -41,32 +54,48 @@ class InteractiveCLITest extends PHPUnit_Framework_TestCase {
 		$this->expectOutputString("something");
 	}
 
-	public function testPrompt() {
+	/**
+	 * 
+	 */
+	public function testMultiLineInput2() {
 		$cli = new TestCli();
-		$cli->setParam('prompt', 'blah');
+	
+		$cli->run($this->stringToResource("continue\necho\necho\nsomethingelse"));
+		$this->expectOutputString("echoechosomethingelse");
+	}
+
+	/**
+	 * Test that the prompt is set and output.
+	 */
+	public function testPrompt() {
+		$cli = new TestCli('blah');
+
 		$cli->run($this->stringToResource(''));
 		$this->expectOutputString("\nblah");
 	}
 
-	public function testWelcomeMessage() {
-		
-	}
-	
-	public function testExitMessage() {
-	
+	/**
+	 * Test that the prompt is set and output.
+	 */
+	public function testPrompt2() {
+		$cli = new TestCli('blah');
+
+		$cli->run($this->stringToResource("continue\ncontinue\necho"));
+		$this->expectOutputString("\nblah\nblah\nblahecho\nblah");
 	}
 
-	public function testSetBadParam() {
-		$cli = new TestCli();
-		
-		try {
-			$cli->setParam('bad', 'value');
-		}
-		catch(\Exception $e) {
-			$this->assertInstanceOf('Exception', $e);
-		}
+	/**
+	 * //TODO
+	 */
+	public function testLineLength() {
+ 		$cli = new TestCli('', 7);
+		$cli->run($this->stringToResource('012345678901234567890123456789'));
+ 		$this->expectOutputString('012345');
 	}
 
+	/**
+	 * Test an uncaught exception.
+	 */
 	public function testCatchError() {
 		$cli = new TestCli();
 
@@ -75,9 +104,15 @@ class InteractiveCLITest extends PHPUnit_Framework_TestCase {
 		}
 		catch(\Exception $e) {
 			$this->assertInstanceOf('Exception', $e);
+			$this->assertEquals('This is an error.', $e->getMessage());
 		}
 	}
 
+	/**
+	 * Convert an string to a resource.
+	 * @param string $string
+	 * @return resource
+	 */
 	private function stringToResource($string) {
 		return fopen("data://text/plain,$string", 'r');
 	}
