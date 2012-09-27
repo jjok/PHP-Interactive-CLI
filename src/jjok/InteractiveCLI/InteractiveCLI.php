@@ -5,6 +5,7 @@ namespace jjok\InteractiveCLI;
 /**
  * Abstract class which can be extended to create a program that accepts multiple lines of input and prints output.
  * @author Jonathan Jefferies (jjok)
+ * @version 1.0.0
  * https://github.com/jjok/PHP-Interactive-CLI
  */
 abstract class InteractiveCLI {
@@ -20,18 +21,6 @@ abstract class InteractiveCLI {
 	 * @var string
 	 */
 	private $prompt;
-
-// 	/**
-// 	 * The welcome message.
-// 	 * @var string
-// 	 */
-// 	private $welcome = '';
-
-// 	/**
-// 	 * The exit message.
-// 	 * @var string
-// 	 */
-// 	private $goodbye = '';
 	
 	/**
 	 * Set some properties.
@@ -43,51 +32,18 @@ abstract class InteractiveCLI {
 		$this->line_length = $line_length;
 	}
 
-// 	/**
-// 	 * Set any of the parameter properties
-// 	 * @param string $param
-// 	 * @param mixed $value
-// 	 * @throws \Exception
-// 	 */
-// 	public function setParam($param, $value) {
-// 		if(property_exists(__CLASS__, $param)) {
-// 			$this->$param = $value;
-// 		}
-// 		else {
-// 			throw new \InvalidArgumentException("Parameter '$param' does not exist.");
-// 		}
-// 	}
-
-// 	/**
-// 	 * Run the program.
-// 	 * @param resource $input
-// 	 * @throws Exception
-// 	 */
-// 	public function run($input) {
-
-// 		#Print welcome message
-// 		$this->output($this->welcome);
-
-// 		#Run program loop
-// 		$this->loop($input);
-
-// 		#Print goodbye message
-// 		$this->output($this->goodbye);
-// 	}
-
 	/**
 	 * Run the program.
 	 * @param resource $input
 	 */
 	public function run($input) {
-		
-//		try {
+
 		while(true) {
 			
 			#Print a prompt, if required.
 			if($this->prompt != '') {
 				if (!isset($line) || $line != '') {
-					$this->output("\n");
+					$this->output(PHP_EOL);
 				}
 				$this->output($this->prompt);
 			}
@@ -100,10 +56,6 @@ abstract class InteractiveCLI {
 				break;
 			}
 		}
-//		}
-//		catch(\Exception $e) {
-//			$this->output($e->getMessage());
-//		}
 	}
 
 	/**
