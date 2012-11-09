@@ -11,7 +11,9 @@ Demo
 
 To run demo:
 
-	php demos/run_demo.php
+	cd demos
+	php run_demo.php
+	php run_demo.php < input.txt
 
 
 TODO
