@@ -50,7 +50,7 @@ abstract class InteractiveCLI {
 			}
 			
 			#Wait for input
-			$line = trim(fgets($input, $this->line_length));
+			$line = trim(fgets($input, $this->line_length + 1));
 			
 			#If readLine returns false, exit the program
 			if(!$this->readLine($line)) {

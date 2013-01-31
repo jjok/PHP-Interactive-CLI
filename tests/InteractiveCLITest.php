@@ -2,30 +2,10 @@
 
 require_once 'src/jjok/InteractiveCLI/InteractiveCLI.php';
 
-class TestCli extends \jjok\InteractiveCLI\InteractiveCLI {
-	
-	public function readLine($input) {
-		
-		if($input == 'error') {
-			throw new \Exception('This is an error.');
-		}
-		elseif($input == 'continue') {
-			return true;
-		}
-		elseif($input == 'echo') {
-			echo 'echo';
-			return true;
-		}
-		echo $input;
-
-		return false;
-	}
-}
-
-class InteractiveCLITest extends PHPUnit_Framework_TestCase {
+class InteractiveCliTest extends PHPUnit_Framework_TestCase {
 	
 	public function testNoInput() {
-		$cli = new TestCli();
+		$cli = new DummyCli();
 
 		$cli->run($this->stringToResource(''));
 		$this->expectOutputString('');
@@ -37,10 +17,10 @@ class InteractiveCLITest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Test 
 	 */
-	public function testPrintInput() {
-		$cli = new TestCli();
-
+	public function testInputIsOutput() {
+		$cli = new DummyCli();
 		$cli->run($this->stringToResource('hi'));
+		
 		$this->expectOutputString('hi');
 	}
 
@@ -48,9 +28,9 @@ class InteractiveCLITest extends PHPUnit_Framework_TestCase {
 	 * 
 	 */
 	public function testMultiLineInput() {
-		$cli = new TestCli();
-	
+		$cli = new DummyCli();
 		$cli->run($this->stringToResource("continue\nsomething"));
+		
 		$this->expectOutputString("something");
 	}
 
@@ -58,52 +38,70 @@ class InteractiveCLITest extends PHPUnit_Framework_TestCase {
 	 * 
 	 */
 	public function testMultiLineInput2() {
-		$cli = new TestCli();
-	
+		$cli = new DummyCli();
 		$cli->run($this->stringToResource("continue\necho\necho\nsomethingelse"));
+		
 		$this->expectOutputString("echoechosomethingelse");
 	}
 
 	/**
 	 * Test that the prompt is set and output.
 	 */
-	public function testPrompt() {
-		$cli = new TestCli('blah');
-
+	public function testPromptCanBeSet() {
+		$cli = new DummyCli('blah');
 		$cli->run($this->stringToResource(''));
-		$this->expectOutputString("\nblah");
+
+		$this->expectOutputString(sprintf('%sblah', PHP_EOL));
 	}
 
 	/**
 	 * Test that the prompt is set and output.
 	 */
-	public function testPrompt2() {
-		$cli = new TestCli('blah');
-
+	public function testPromptCanBeSet2() {
+		$cli = new DummyCli('blah');
 		$cli->run($this->stringToResource("continue\ncontinue\necho"));
-		$this->expectOutputString("\nblah\nblah\nblahecho\nblah");
+
+		$this->expectOutputString(sprintf('%sblah%sblah%sblahecho%sblah', PHP_EOL, PHP_EOL, PHP_EOL, PHP_EOL));
 	}
 
 	/**
 	 * //TODO
 	 */
-	public function testLineLength() {
- 		$cli = new TestCli('', 7);
-		$cli->run($this->stringToResource('012345678901234567890123456789'));
- 		$this->expectOutputString('012345');
+	public function testLineLengthCanBeSet() {
+ 		$cli = new DummyCli('', 1);
+ 		
+ 		$res = $this->stringToResource('abcdefghijklmnopqrstuvwxwz');
+		$cli->run($res);
+ 		$this->expectOutputString('a');
+ 		
+ 		$cli->run($res);
+ 		$this->expectOutputString('ab');
+ 		
+ 		$cli->run($res);
+ 		$this->expectOutputString('abc');
+ 		
+ 		$cli2 = new DummyCli('', 6);
+ 		$cli2->run($res);
+		$this->expectOutputString('abcdefghi');
+
+		$cli2->run($res);
+		$this->expectOutputString('abcdefghijklmno');
+		
+		$cli2->run($res);
+		$this->expectOutputString('abcdefghijklmnopqrstu');
 	}
 
 	/**
 	 * Test an uncaught exception.
 	 */
 	public function testCatchError() {
-		$cli = new TestCli();
+		$cli = new DummyCli();
 
 		try {
 			$cli->run($this->stringToResource('error'));
 		}
 		catch(\Exception $e) {
-			$this->assertInstanceOf('Exception', $e);
+			$this->assertInstanceOf('RuntimeException', $e);
 			$this->assertEquals('This is an error.', $e->getMessage());
 		}
 	}
