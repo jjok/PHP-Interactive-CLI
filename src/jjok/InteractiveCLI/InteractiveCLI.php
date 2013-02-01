@@ -6,7 +6,7 @@ namespace jjok\InteractiveCLI;
  * Abstract class which can be extended to create a program that accepts
  * multiple lines of input and prints output.
  * @author Jonathan Jefferies (jjok)
- * @version 1.0.0
+ * @version 1.0.1
  * https://github.com/jjok/PHP-Interactive-CLI
  */
 abstract class InteractiveCLI {
