@@ -1,6 +1,7 @@
 <?php
 
 require_once 'src/jjok/InteractiveCLI/InteractiveCLI.php';
+require_once 'DummyCli.php';
 
 class InteractiveCliTest extends PHPUnit_Framework_TestCase {
 	
