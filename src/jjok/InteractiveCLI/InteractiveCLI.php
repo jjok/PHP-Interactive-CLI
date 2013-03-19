@@ -41,7 +41,7 @@ abstract class InteractiveCLI {
 
 		while(true) {
 			
-			#Print a prompt, if required.
+			# Print a prompt, if required.
 			if($this->prompt != '') {
 				if (!isset($line) || $line != '') {
 					$this->output(PHP_EOL);
@@ -49,10 +49,10 @@ abstract class InteractiveCLI {
 				$this->output($this->prompt);
 			}
 			
-			#Wait for input
+			# Wait for input
 			$line = trim(fgets($input, $this->line_length + 1));
 			
-			#If readLine returns false, exit the program
+			# If readLine returns false, exit the program.
 			if(!$this->readLine($line)) {
 				break;
 			}
