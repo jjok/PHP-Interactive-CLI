@@ -16,3 +16,8 @@ To run demo:
 	cd demos
 	php run_demo.php
 	php run_demo.php < input.txt
+
+TODO
+----
+
+* Add an interface to be implemented by line readers, instead of extending main class.
